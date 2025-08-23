@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import {
   TrendingUp,
   TrendingDown,
@@ -17,7 +17,7 @@ const SalesIntelligence: React.FC<SalesIntelligenceProps> = ({ timeframe }) => {
     queryKey: ['sales-intelligence', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('sales-optimization', {
+        const { data, error } = await supabaseAdmin.functions.invoke('sales-optimization', {
           body: {
             timeframe,
             metrics: ['revenue', 'conversion', 'trends']

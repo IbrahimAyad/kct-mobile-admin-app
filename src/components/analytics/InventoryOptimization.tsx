@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import {
   Package,
   AlertTriangle,
@@ -18,7 +18,7 @@ const InventoryOptimization: React.FC<InventoryOptimizationProps> = ({ timeframe
     queryKey: ['inventory-optimization', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('inventory-optimization', {
+        const { data, error } = await supabaseAdmin.functions.invoke('inventory-optimization', {
           body: {
             optimization_type: 'stock_levels',
             algorithms: ['abc_analysis', 'eoq', 'safety_stock'],

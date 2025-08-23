@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Order, OrderStatus, OrderPriority, ProductSource, STATUS_COLORS, PRIORITY_COLORS } from '../../config/orders';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import { Clock, Crown, Users, Package, AlertTriangle, ArrowRight, Filter, Search, RefreshCw } from 'lucide-react';
 
 interface AdvancedOrderQueueProps {
@@ -98,7 +98,7 @@ export function AdvancedOrderQueue({ orders, onOrderSelect, onStatusUpdate, onPr
     try {
       setProcessingAction(action.orderId);
       
-      const { data, error } = await supabase.functions.invoke('order-workflow-automation', {
+      const { data, error } = await supabaseAdmin.functions.invoke('order-workflow-automation', {
         body: action
       });
 

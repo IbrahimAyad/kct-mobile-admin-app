@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import {
   BarChart3,
   TrendingUp,
@@ -18,7 +18,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({ timeframe }) 
     queryKey: ['predictive-analytics', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('predictive-analytics', {
+        const { data, error } = await supabaseAdmin.functions.invoke('predictive-analytics', {
           body: {
             prediction_type: 'revenue',
             horizon: '90d',

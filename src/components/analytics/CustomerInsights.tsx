@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import {
   Users,
   Heart,
@@ -18,7 +18,7 @@ const CustomerInsights: React.FC<CustomerInsightsProps> = ({ timeframe }) => {
     queryKey: ['customer-insights', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('customer-analytics', {
+        const { data, error } = await supabaseAdmin.functions.invoke('customer-analytics', {
           body: {
             analysis_type: 'behavior',
             segment_criteria: ['purchase_frequency', 'value', 'recency'],

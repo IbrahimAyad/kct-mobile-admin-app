@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Order, OrderStatus, OrderPriority, ProductSource, CORE_PRODUCTS_CONFIG } from '../../config/orders';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { TrendingUp, Package, Users, DollarSign, Clock, AlertTriangle, Crown, Star } from 'lucide-react';
 
@@ -61,7 +61,7 @@ export function CoreProductsIntegration({ orders }: CoreProductsIntegrationProps
   const fetchCoreProductsData = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase.functions.invoke('core-products-integration');
+      const { data, error } = await supabaseAdmin.functions.invoke('core-products-integration');
       
       if (error) throw error;
       

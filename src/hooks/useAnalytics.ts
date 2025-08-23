@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseAdmin } from '../lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 
 // PostHog integration for user behavior analytics
@@ -23,7 +23,7 @@ export const useAnalytics = () => {
   const { data: executiveData, isLoading: executiveLoading, error: executiveError, refetch: refetchExecutive } = useQuery({
     queryKey: ['analytics', 'executive', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('sales-optimization', {
+      const { data, error } = await supabaseAdmin.functions.invoke('sales-optimization', {
         body: { timeframe, metrics: ['revenue', 'conversion', 'trends'] }
       });
       if (error) throw error;
@@ -37,7 +37,7 @@ export const useAnalytics = () => {
   const { data: salesData, isLoading: salesLoading, refetch: refetchSales } = useQuery({
     queryKey: ['analytics', 'sales', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('sales-optimization', {
+      const { data, error } = await supabaseAdmin.functions.invoke('sales-optimization', {
         body: { timeframe, metrics: ['optimization', 'recommendations'] }
       });
       if (error) throw error;
@@ -50,7 +50,7 @@ export const useAnalytics = () => {
   const { data: customerData, isLoading: customerLoading, refetch: refetchCustomer } = useQuery({
     queryKey: ['analytics', 'customer', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('customer-analytics', {
+      const { data, error } = await supabaseAdmin.functions.invoke('customer-analytics', {
         body: { 
           analysis_type: 'behavior',
           segment_criteria: ['purchase_frequency', 'value', 'recency'],
@@ -67,7 +67,7 @@ export const useAnalytics = () => {
   const { data: predictiveData, isLoading: predictiveLoading, refetch: refetchPredictive } = useQuery({
     queryKey: ['analytics', 'predictive', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('predictive-analytics', {
+      const { data, error } = await supabaseAdmin.functions.invoke('predictive-analytics', {
         body: { 
           prediction_type: 'revenue',
           horizon: '90d',
@@ -84,7 +84,7 @@ export const useAnalytics = () => {
   const { data: inventoryData, isLoading: inventoryLoading, refetch: refetchInventory } = useQuery({
     queryKey: ['analytics', 'inventory', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('inventory-optimization', {
+      const { data, error } = await supabaseAdmin.functions.invoke('inventory-optimization', {
         body: { 
           optimization_type: 'stock_levels',
           algorithms: ['abc_analysis', 'eoq', 'safety_stock']
@@ -100,7 +100,7 @@ export const useAnalytics = () => {
   const { data: marketData, isLoading: marketLoading, refetch: refetchMarket } = useQuery({
     queryKey: ['analytics', 'market', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('market-intelligence', {
+      const { data, error } = await supabaseAdmin.functions.invoke('market-intelligence', {
         body: { 
           intelligence_type: 'competitive',
           market_segments: ['menswear', 'luxury', 'online'],
