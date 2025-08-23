@@ -125,7 +125,7 @@ export function ProcessingDashboard({ orders, analytics, onOrderSelect }: Proces
                           #{order.id.slice(-8)}
                         </span>
                         <span className="text-sm text-gray-600">
-                          {order.customer?.first_name} {order.customer?.last_name}
+                          {order.customer?.name || order.customer_name}
                         </span>
                         {latestStage && (
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${

@@ -62,9 +62,19 @@ export function CommunicationLogComponent({ communications, onAddCommunication }
       'email': 'bg-blue-100 text-blue-800',
       'sms': 'bg-green-100 text-green-800',
       'call': 'bg-purple-100 text-purple-800',
-      'system': 'bg-gray-100 text-gray-800'
+      'system': 'bg-gray-100 text-gray-800',
+      'order_confirmation': 'bg-blue-100 text-blue-800',
+      'payment_confirmation': 'bg-green-100 text-green-800',
+      'processing_update': 'bg-yellow-100 text-yellow-800',
+      'shipping_notification': 'bg-orange-100 text-orange-800',
+      'delivery_confirmation': 'bg-green-100 text-green-800',
+      'delay_notification': 'bg-red-100 text-red-800',
+      'exception_alert': 'bg-red-100 text-red-800',
+      'review_request': 'bg-purple-100 text-purple-800',
+      'satisfaction_survey': 'bg-indigo-100 text-indigo-800',
+      'custom_message': 'bg-gray-100 text-gray-800'
     };
-    return colors[type];
+    return colors[type] || 'bg-gray-100 text-gray-800';
   };
 
   const getDirectionColor = (direction: 'inbound' | 'outbound') => {
@@ -79,11 +89,17 @@ export function CommunicationLogComponent({ communications, onAddCommunication }
         order_id: newMessage.orderId,
         customer_id: newMessage.customerId,
         communication_type: newMessage.type,
+        communication_channel: newMessage.type === 'email' ? 'email' : newMessage.type === 'sms' ? 'sms' : 'in_app',
         direction: newMessage.direction,
         subject: newMessage.subject,
+        message_content: newMessage.content,
         content: newMessage.content,
         sent_at: new Date().toISOString(),
-        response_received: false
+        delivery_status: 'pending',
+        response_received: false,
+        is_automated: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       });
       
       setNewMessage({

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Clock, AlertTriangle, Calendar, User } from 'lucide-react';
-import { Order, PriorityLevel, OrderStatus, DASHBOARD_CONFIG } from '../../config/orders';
+import { Order, OrderPriority, OrderStatus, DASHBOARD_CONFIG } from '../../config/orders';
 
 interface OrderQueueProps {
   orders: Order[];
   onOrderSelect: (order: Order) => void;
   onStatusUpdate: (orderId: string, status: any) => void;
-  onPriorityUpdate: (orderId: string, priority: PriorityLevel) => void;
+  onPriorityUpdate: (orderId: string, priority: OrderPriority) => void;
 }
 
 export function OrderQueue({ orders, onOrderSelect, onStatusUpdate, onPriorityUpdate }: OrderQueueProps) {
@@ -41,9 +41,9 @@ export function OrderQueue({ orders, onOrderSelect, onStatusUpdate, onPriorityUp
     return 'Just now';
   };
 
-  const getPriorityColor = (priority?: PriorityLevel) => {
-    if (!priority) return DASHBOARD_CONFIG.PRIORITY_COLORS[PriorityLevel.MEDIUM];
-    return DASHBOARD_CONFIG.PRIORITY_COLORS[priority] || DASHBOARD_CONFIG.PRIORITY_COLORS[PriorityLevel.MEDIUM];
+  const getPriorityColor = (priority?: OrderPriority) => {
+    if (!priority) return DASHBOARD_CONFIG.PRIORITY_COLORS[OrderPriority.NORMAL];
+    return DASHBOARD_CONFIG.PRIORITY_COLORS[priority] || DASHBOARD_CONFIG.PRIORITY_COLORS[OrderPriority.NORMAL];
   };
 
   const getStatusColor = (status: string) => {
@@ -104,7 +104,7 @@ export function OrderQueue({ orders, onOrderSelect, onStatusUpdate, onPriorityUp
                   
                   <div className="flex items-center text-sm text-gray-600 mb-1">
                     <User className="h-4 w-4 mr-1" />
-                    {order.customer?.first_name} {order.customer?.last_name}
+                    {order.customer?.name || order.customer_name}
                   </div>
                   
                   <div className="flex items-center text-sm text-gray-500">
@@ -149,7 +149,7 @@ export function OrderQueue({ orders, onOrderSelect, onStatusUpdate, onPriorityUp
                   value={order.priority_level || 'medium'}
                   onChange={(e) => {
                     e.stopPropagation();
-                    onPriorityUpdate(order.id, e.target.value as PriorityLevel);
+                    onPriorityUpdate(order.id, e.target.value as OrderPriority);
                   }}
                 >
                   <option value="low">Low</option>
