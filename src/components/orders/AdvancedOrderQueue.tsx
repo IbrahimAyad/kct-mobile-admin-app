@@ -98,7 +98,7 @@ export function AdvancedOrderQueue({ orders, onOrderSelect, onStatusUpdate, onPr
     try {
       setProcessingAction(action.orderId);
       
-      const { data, error } = await supabaseAdmin.functions.invoke('order-workflow-automation', {
+      const { data, error } = await supabase.functions.invoke('order-workflow-automation', {
         body: action
       });
 

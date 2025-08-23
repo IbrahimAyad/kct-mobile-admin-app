@@ -19,7 +19,7 @@ const ExecutiveOverview: React.FC<ExecutiveOverviewProps> = ({ timeframe }) => {
   const { data: insights, isLoading, error } = useQuery({
     queryKey: ['executive-insights', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabaseAdmin.functions.invoke('analytics-proxy', {
+      const { data, error } = await supabase.functions.invoke('analytics-proxy', {
         body: {
           endpoint: '/executive/overview',
           params: { timeframe }

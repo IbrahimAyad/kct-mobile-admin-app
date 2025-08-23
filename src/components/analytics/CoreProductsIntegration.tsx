@@ -61,7 +61,7 @@ export function CoreProductsIntegration({ orders }: CoreProductsIntegrationProps
   const fetchCoreProductsData = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabaseAdmin.functions.invoke('core-products-integration');
+      const { data, error } = await supabase.functions.invoke('core-products-integration');
       
       if (error) throw error;
       

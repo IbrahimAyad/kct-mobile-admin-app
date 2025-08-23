@@ -18,7 +18,7 @@ const InventoryOptimization: React.FC<InventoryOptimizationProps> = ({ timeframe
     queryKey: ['inventory-optimization', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabaseAdmin.functions.invoke('inventory-optimization', {
+        const { data, error } = await supabase.functions.invoke('inventory-optimization', {
           body: {
             optimization_type: 'stock_levels',
             algorithms: ['abc_analysis', 'eoq', 'safety_stock'],

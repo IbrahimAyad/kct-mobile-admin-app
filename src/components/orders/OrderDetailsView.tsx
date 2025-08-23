@@ -69,7 +69,7 @@ export function OrderDetailsView({
     try {
       setLoadingWorkflow(true);
       
-      const { data, error } = await supabaseAdmin.functions.invoke('order-workflow-automation', {
+      const { data, error } = await supabase.functions.invoke('order-workflow-automation', {
         body: action
       });
 
@@ -90,7 +90,7 @@ export function OrderDetailsView({
     if (!newCommunication.type || !newCommunication.message) return;
     
     try {
-      const { data, error } = await supabaseAdmin.functions.invoke('customer-communication', {
+      const { data, error } = await supabase.functions.invoke('customer-communication', {
         body: {
           orderId: order.id,
           communicationType: newCommunication.type,

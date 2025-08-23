@@ -19,7 +19,7 @@ const MarketIntelligence: React.FC<MarketIntelligenceProps> = ({ timeframe }) =>
     queryKey: ['market-intelligence', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabaseAdmin.functions.invoke('market-intelligence', {
+        const { data, error } = await supabase.functions.invoke('market-intelligence', {
           body: {
             intelligence_type: 'competitive',
             market_segments: ['menswear', 'luxury', 'online'],

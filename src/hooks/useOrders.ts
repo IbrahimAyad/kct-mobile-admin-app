@@ -140,7 +140,7 @@ export function useOrders(): OrdersState & OrdersActions {
 
   // Set up real-time subscriptions
   useEffect(() => {
-    const ordersSubscription = supabaseAdmin
+    const ordersSubscription = supabase
       .channel('orders_changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'orders' },

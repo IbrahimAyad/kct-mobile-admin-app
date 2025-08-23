@@ -18,7 +18,7 @@ const PredictiveAnalytics: React.FC<PredictiveAnalyticsProps> = ({ timeframe }) 
     queryKey: ['predictive-analytics', timeframe],
     queryFn: async () => {
       try {
-        const { data, error } = await supabaseAdmin.functions.invoke('predictive-analytics', {
+        const { data, error } = await supabase.functions.invoke('predictive-analytics', {
           body: {
             prediction_type: 'revenue',
             horizon: '90d',
