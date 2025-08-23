@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Order, OrderException, CommunicationLog, OrderStatus, OrderPriority } from '../../config/orders';
+import { Order, OrderItem, OrderException, CommunicationLog, OrderStatus, OrderPriority } from '../../config/orders';
 import { supabase } from '../../lib/supabase';
 import { X, Mail, Phone, MessageSquare, Calendar, Clock, User, Package, AlertTriangle, CheckCircle, XCircle, Send } from 'lucide-react';
 
 interface OrderDetailsViewProps {
   order: Order;
-  orderItems: any[];
+  orderItems: OrderItem[];
   communications: CommunicationLog[];
   onClose: () => void;
   onStatusUpdate: (orderId: string, status: OrderStatus) => void;
@@ -122,7 +122,7 @@ export function OrderDetailsView({
       }
       acc[bundleId].items.push(item);
       return acc;
-    }, {} as Record<string, { type: string; items: any[] }>);
+    }, {} as Record<string, { type?: string; items: OrderItem[] }>);
     
     return Object.entries(groups);
   };
