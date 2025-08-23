@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../../lib/supabase';
+import { supabase, supabaseAdmin } from '../../lib/supabase';
 import {
   BarChart3,
   TrendingUp,
@@ -19,7 +19,7 @@ const ExecutiveOverview: React.FC<ExecutiveOverviewProps> = ({ timeframe }) => {
   const { data: insights, isLoading, error } = useQuery({
     queryKey: ['executive-insights', timeframe],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke('analytics-proxy', {
+      const { data, error } = await supabaseAdmin.functions.invoke('analytics-proxy', {
         body: {
           endpoint: '/executive/overview',
           params: { timeframe }

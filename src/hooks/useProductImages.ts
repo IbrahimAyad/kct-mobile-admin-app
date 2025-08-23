@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 import toast from 'react-hot-toast'
 
 // Product Images Management Hook
@@ -12,7 +12,7 @@ export function useProductImages(productId?: string) {
     queryFn: async () => {
       if (!productId) return []
       
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAdmin
         .from('product_images')
         .select('*')
         .eq('product_id', productId)
@@ -31,7 +31,7 @@ export function useProductImages(productId?: string) {
     queryFn: async () => {
       if (!productId) return { primary_image: null, image_gallery: [], gallery_urls: [] }
       
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAdmin
         .from('products')
         .select('primary_image, image_gallery, gallery_urls')
         .eq('id', productId)
@@ -70,7 +70,7 @@ export function useProductImages(productId?: string) {
             const base64Data = reader.result as string
 
             // Use Edge Function to upload image
-            const { data, error } = await supabase.functions.invoke('image-upload', {
+            const { data, error } = await supabaseAdmin.functions.invoke('image-upload', {
               body: {
                 imageData: base64Data,
                 fileName: file.name,
@@ -111,7 +111,7 @@ export function useProductImages(productId?: string) {
       imageUrl?: string
       productId?: string
     }) => {
-      const { data, error } = await supabase.functions.invoke('image-delete', {
+      const { data, error } = await supabaseAdmin.functions.invoke('image-delete', {
         body: {
           imageId,
           imageUrl,
@@ -147,7 +147,7 @@ export function useProductImages(productId?: string) {
         image_type: string
       }>
     }) => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAdmin
         .from('product_images')
         .update(updates)
         .eq('id', imageId)
@@ -175,7 +175,7 @@ export function useProductImages(productId?: string) {
       productId: string
       imageUrl: string
     }) => {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseAdmin
         .from('products')
         .update({ primary_image: imageUrl })
         .eq('id', productId)
