@@ -112,24 +112,24 @@ export const AnalyticsDashboard: React.FC = () => {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white border border-gray-200 rounded-lg">
-        <div className="px-6 py-6">
-          <div className="flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-4 sm:py-6">
+          <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center space-x-3">
-                <Zap className="h-8 w-8 text-purple-600" />
-                <span>AI-Enhanced Analytics Dashboard</span>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center space-x-3">
+                <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
+                <span>AI-Enhanced Analytics</span>
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-sm sm:text-base text-gray-600 mt-1">
                 Advanced business intelligence powered by KCT Knowledge API
               </p>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
               {/* Timeframe Selector */}
               <div className="flex items-center space-x-2">
                 <Clock className="h-4 w-4 text-gray-500" />
                 <Select value={timeframe} onValueChange={setTimeframe}>
-                  <SelectTrigger className="w-32">
+                  <SelectTrigger className="w-36 sm:w-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -149,7 +149,7 @@ export const AnalyticsDashboard: React.FC = () => {
                   value={refreshInterval.toString()} 
                   onValueChange={(value) => setRefreshInterval(parseInt(value))}
                 >
-                  <SelectTrigger className="w-24">
+                  <SelectTrigger className="w-20 sm:w-24">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -168,6 +168,7 @@ export const AnalyticsDashboard: React.FC = () => {
                 variant="outline" 
                 size="sm"
                 disabled={isLoading}
+                className="w-full sm:w-auto"
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
@@ -179,21 +180,29 @@ export const AnalyticsDashboard: React.FC = () => {
 
       {/* Dashboard Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          {/* Tab Navigation */}
+          {/* Tab Navigation - Mobile Optimized */}
           <div className="bg-white rounded-lg border border-gray-200 p-2">
-            <TabsList className="grid w-full grid-cols-6 gap-2 bg-transparent">
+            <TabsList className="grid w-full lg:grid-cols-6 sm:grid-cols-3 grid-cols-2 gap-2 bg-transparent">
               {tabs.map((tab) => {
                 const IconComponent = tab.icon;
                 return (
                   <TabsTrigger
                     key={tab.id}
                     value={tab.id}
-                    className="flex flex-col items-center space-y-2 p-4 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 border border-transparent rounded-md transition-all"
+                    className="flex flex-col items-center space-y-1 sm:space-y-2 p-2 sm:p-4 data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 data-[state=active]:border-blue-200 border border-transparent rounded-md transition-all min-h-[80px] sm:min-h-[100px]"
                   >
-                    <IconComponent className="h-5 w-5" />
+                    <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
                     <div className="text-center">
-                      <div className="text-sm font-medium">{tab.label}</div>
-                      <div className="text-xs text-gray-500 hidden lg:block">
+                      <div className="text-xs sm:text-sm font-medium leading-tight">
+                        {tab.label.split(' ').map((word, index, arr) => (
+                          <span key={index}>
+                            {word}
+                            {index < arr.length - 1 && <br className="sm:hidden" />}
+                            {index < arr.length - 1 && <span className="hidden sm:inline"> </span>}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="text-xs text-gray-500 hidden xl:block mt-1">
                         {tab.description}
                       </div>
                     </div>
@@ -208,15 +217,15 @@ export const AnalyticsDashboard: React.FC = () => {
             const ComponentToRender = tab.component;
             return (
               <TabsContent key={tab.id} value={tab.id} className="space-y-6">
-                <div className="bg-white rounded-lg border border-gray-200 p-6">
-                  <div className="flex items-center justify-between mb-6">
+                <div className="bg-white rounded-lg border border-gray-200 p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0">
                     <div className="flex items-center space-x-3">
-                      <tab.icon className="h-6 w-6 text-blue-600" />
+                      <tab.icon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                       <div>
-                        <h2 className="text-xl font-semibold text-gray-900">
+                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
                           {tab.label}
                         </h2>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-xs sm:text-sm text-gray-600">
                           {tab.description}
                         </p>
                       </div>
@@ -224,12 +233,12 @@ export const AnalyticsDashboard: React.FC = () => {
                     
                     <div className="flex items-center space-x-2">
                       {isLoading && (
-                        <Badge variant="secondary" className="animate-pulse">
+                        <Badge variant="secondary" className="animate-pulse text-xs">
                           <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
                           Loading...
                         </Badge>
                       )}
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="text-xs">
                         Updated every {getRefreshIntervalLabel(refreshInterval)}
                       </Badge>
                     </div>

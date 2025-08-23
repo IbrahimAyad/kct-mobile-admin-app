@@ -231,22 +231,22 @@ export default function Orders() {
           <table className="min-w-full divide-y divide-neutral-200">
             <thead className="bg-neutral-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                   Order
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider hidden sm:table-cell">
                   Customer
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider hidden lg:table-cell">
                   Date
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                   Total
                 </th>
-                <th className="relative px-6 py-3">
+                <th className="relative px-3 sm:px-6 py-3">
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
@@ -254,32 +254,34 @@ export default function Orders() {
             <tbody className="bg-white divide-y divide-neutral-200">
               {data?.orders.map((order: any) => (
                 <tr key={order.id} className="hover:bg-neutral-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <div>
                       <div className="text-sm font-medium text-neutral-900">
                         #{order.order_number}
                       </div>
-                      <div className="text-sm text-neutral-500">
+                      <div className="text-xs sm:text-sm text-neutral-500">
                         ID: {order.id.slice(0, 8)}...
+                      </div>
+                      {/* Show customer email on mobile */}
+                      <div className="text-xs text-neutral-500 sm:hidden mt-1">
+                        {order.customer_email}
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap hidden sm:table-cell">
                     <div className="text-sm text-neutral-900">
                       {order.customer_email}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-neutral-900 hidden lg:table-cell">
                     {formatDate(order.created_at)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
                     <select
                       value={order.status}
                       onChange={(e) => handleStatusChange(order.id, e.target.value)}
                       disabled={updateOrderStatus.isPending}
-                      className={`text-xs font-medium rounded-full px-2 py-1 border-0 focus:ring-2 focus:ring-black ${
-                        getStatusColor(order.status)
-                      }`}
+                      className={`text-xs font-medium rounded-full px-2 py-1 border-0 focus:ring-2 focus:ring-black min-h-[32px] touch-manipulation ${getStatusColor(order.status)}`}
                     >
                       {statuses.map((stat) => (
                         <option key={stat} value={stat}>
@@ -287,19 +289,25 @@ export default function Orders() {
                         </option>
                       ))}
                     </select>
+                    {/* Show date on mobile/tablet */}
+                    <div className="text-xs text-neutral-500 lg:hidden mt-1">
+                      {formatDate(order.created_at)}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">
-                    {formatCurrency(order.total_amount)}
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-neutral-900">
+                      {formatCurrency(order.total_amount)}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <div className="flex items-center justify-end space-x-1 sm:space-x-2">
                       <Link
                         to={`/orders/${order.id}`}
-                        className="inline-flex items-center p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50"
+                        className="inline-flex items-center p-2 sm:p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50 touch-manipulation"
                       >
                         <Eye className="h-4 w-4" />
                       </Link>
-                      <button className="inline-flex items-center p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50">
+                      <button className="inline-flex items-center p-2 sm:p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50 touch-manipulation">
                         <MoreVertical className="h-4 w-4" />
                       </button>
                     </div>
@@ -308,6 +316,12 @@ export default function Orders() {
               ))}
             </tbody>
           </table>
+        </div>
+        {/* Mobile scroll indicator */}
+        <div className="sm:hidden px-4 py-2 bg-neutral-50 border-t border-neutral-200">
+          <p className="text-xs text-neutral-500 text-center">
+            ← Scroll horizontally to see more details →
+          </p>
         </div>
       </div>
 

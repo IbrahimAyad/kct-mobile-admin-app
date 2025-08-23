@@ -179,22 +179,22 @@ export default function Products() {
             <table className="min-w-full divide-y divide-neutral-200">
               <thead className="bg-neutral-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider hidden sm:table-cell">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider hidden lg:table-cell">
                     Price
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider hidden md:table-cell">
                     Variants
                   </th>
-                  <th className="relative px-6 py-3">
+                  <th className="relative px-3 sm:px-6 py-3">
                     <span className="sr-only">Actions</span>
                   </th>
                 </tr>
@@ -205,6 +205,12 @@ export default function Products() {
                 ))}
               </tbody>
             </table>
+          </div>
+          {/* Mobile scroll indicator */}
+          <div className="sm:hidden px-4 py-2 bg-neutral-50 border-t border-neutral-200">
+            <p className="text-xs text-neutral-500 text-center">
+              ← Scroll horizontally to see more details →
+            </p>
           </div>
         </div>
       )}
@@ -376,60 +382,71 @@ function ProductRow({ product }: { product: any }) {
 
   return (
     <tr className="hover:bg-neutral-50">
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
-          <div className="flex-shrink-0 h-12 w-12">
+          <div className="flex-shrink-0 h-10 w-10 sm:h-12 sm:w-12">
             {getPrimaryImageFromProduct(product) ? (
               <img
                 src={getPrimaryImageFromProduct(product) || ''}
                 alt={product.name}
-                className="h-12 w-12 rounded-md object-cover"
+                className="h-10 w-10 sm:h-12 sm:w-12 rounded-md object-cover"
               />
             ) : (
-              <div className="h-12 w-12 rounded-md bg-neutral-100 flex items-center justify-center">
-                <Package className="h-6 w-6 text-neutral-400" />
+              <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-md bg-neutral-100 flex items-center justify-center">
+                <Package className="h-5 w-5 sm:h-6 sm:w-6 text-neutral-400" />
               </div>
             )}
           </div>
-          <div className="ml-4">
+          <div className="ml-3 sm:ml-4">
             <div className="text-sm font-medium text-neutral-900">
               {product.name}
             </div>
-            <div className="text-sm text-neutral-500">
+            <div className="text-xs sm:text-sm text-neutral-500">
               SKU: {product.sku}
+            </div>
+            {/* Show category and price on mobile */}
+            <div className="sm:hidden mt-1">
+              <div className="text-xs text-neutral-500">{product.category}</div>
+              <div className="text-xs text-neutral-900 font-medium lg:hidden">
+                {formatCurrency(product.base_price)}
+              </div>
             </div>
           </div>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-neutral-900 hidden sm:table-cell">
         <div>
           <div>{product.category}</div>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-neutral-900 hidden lg:table-cell">
         <div>
           <div>{formatCurrency(product.base_price)}</div>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
           getStatusColor(product.status)
         }`}>
           {product.status}
         </span>
+        {/* Show variants on mobile */}
+        <div className="text-xs text-neutral-500 md:hidden mt-1">
+          {product.product_variants?.[0]?.count || 0} variants
+        </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-neutral-900 hidden md:table-cell">
         {product.product_variants?.[0]?.count || 0}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <div className="flex items-center justify-end space-x-2">
+      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <div className="flex items-center justify-end space-x-1 sm:space-x-2">
           <Link
             to={`/products/${product.id}`}
-            className="text-black hover:text-neutral-700"
+            className="text-black hover:text-neutral-700 px-2 py-1 text-xs sm:text-sm touch-manipulation"
           >
             View
           </Link>
-          <button className="text-black hover:text-neutral-700">
+          <button className="text-black hover:text-neutral-700 px-2 py-1 text-xs sm:text-sm touch-manipulation">
             Edit
           </button>
         </div>
