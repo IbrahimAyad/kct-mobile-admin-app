@@ -146,7 +146,7 @@ export default function EnhancedOrderDashboard() {
 
   const handleStatusUpdate = async (orderId: string, status: OrderStatus) => {
     try {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('orders')
         .update({ order_status: status, updated_at: new Date().toISOString() })
         .eq('id', orderId);
@@ -162,7 +162,7 @@ export default function EnhancedOrderDashboard() {
 
   const handlePriorityUpdate = async (orderId: string, priority: OrderPriority) => {
     try {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('orders')
         .update({ order_priority: priority, updated_at: new Date().toISOString() })
         .eq('id', orderId);
