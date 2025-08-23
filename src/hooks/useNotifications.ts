@@ -96,7 +96,7 @@ export function useNotifications() {
   // Mark notification as read
   const markAsReadMutation = useMutation({
     mutationFn: async (notificationId: string) => {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('admin_notifications')
         .update({ is_read: true, read_at: new Date().toISOString() })
         .eq('id', notificationId)
@@ -116,7 +116,7 @@ export function useNotifications() {
   // Mark all notifications as read
   const markAllAsReadMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('admin_notifications')
         .update({ is_read: true, read_at: new Date().toISOString() })
         .eq('is_read', false)
@@ -137,7 +137,7 @@ export function useNotifications() {
   // Delete notification
   const deleteNotificationMutation = useMutation({
     mutationFn: async (notificationId: string) => {
-      const { error } = await supabase
+      const { error } = await supabaseAdmin
         .from('admin_notifications')
         .delete()
         .eq('id', notificationId)

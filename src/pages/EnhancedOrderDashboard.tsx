@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseAdmin } from '../lib/supabase';
 import { Order, OrderStatus, OrderPriority, ProductSource } from '../config/orders';
 import { CoreProductsIntegration } from '../components/analytics/CoreProductsIntegration';
 import { AdvancedOrderQueue } from '../components/orders/AdvancedOrderQueue';
@@ -58,7 +58,7 @@ export default function EnhancedOrderDashboard() {
       setError(null);
 
       // Fetch orders with items
-      const { data: ordersData, error: ordersError } = await supabase
+      const { data: ordersData, error: ordersError } = await supabaseAdmin
         .from('orders')
         .select(`
           *,

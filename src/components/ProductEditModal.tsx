@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseAdmin } from '../lib/supabase'
 import toast from 'react-hot-toast'
 import { X, Save, Loader2 } from 'lucide-react'
 
@@ -80,7 +80,7 @@ export default function ProductEditModal({ product, isOpen, onClose }: ProductEd
         updated_at: new Date().toISOString()
       }
 
-      const { data: result, error } = await supabase
+      const { data: result, error } = await supabaseAdmin
         .from('products')
         .update(updateData)
         .eq('id', product.id)
