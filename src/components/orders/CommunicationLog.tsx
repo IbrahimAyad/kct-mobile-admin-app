@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageSquare, Send, Mail, Phone, Calendar, User, Filter } from 'lucide-react';
-import { CommunicationLog, CommunicationType } from '../../config/orders';
+import { CommunicationLog, CommunicationType, CommunicationChannel } from '../../config/orders';
 
 interface CommunicationLogProps {
   communications: CommunicationLog[];
@@ -89,7 +89,7 @@ export function CommunicationLogComponent({ communications, onAddCommunication }
         order_id: newMessage.orderId,
         customer_id: newMessage.customerId,
         communication_type: newMessage.type,
-        communication_channel: newMessage.type === 'email' ? 'email' : newMessage.type === 'sms' ? 'sms' : 'in_app',
+        communication_channel: newMessage.type === 'email' ? CommunicationChannel.EMAIL : newMessage.type === 'sms' ? CommunicationChannel.SMS : CommunicationChannel.IN_APP,
         direction: newMessage.direction,
         subject: newMessage.subject,
         message_content: newMessage.content,
