@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDashboardStats } from '../hooks/useData'
 import { AdminTestComponent } from '../components/AdminTestComponent'
+import { DebugPanel } from '../components/DebugPanel'
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -89,6 +90,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Debug Panel - temporary for debugging */}
+      <DebugPanel />
+      
       {/* Admin Test Component - temporary for debugging */}
       <AdminTestComponent />
       
