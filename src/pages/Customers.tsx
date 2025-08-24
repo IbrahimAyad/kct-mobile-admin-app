@@ -31,11 +31,12 @@ export default function Customers() {
     })
   }
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number | string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-    }).format(amount)
+    }).format(numAmount || 0)
   }
 
   if (isLoading) {
@@ -130,12 +131,9 @@ export default function Customers() {
               <ShoppingBag className="h-8 w-8 text-purple-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-neutral-500">Active Customers</p>
+              <p className="text-sm font-medium text-neutral-500">VIP Customers</p>
               <p className="text-2xl font-bold text-neutral-900">
-                {data?.customers.filter((customer: any) => {
-                  // Consider customers active if they have recent activity
-                  return new Date(customer.created_at) > new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)
-                }).length || 0}
+                {data?.customers.filter((customer: any) => customer.vip_status).length || 0}
               </p>
             </div>
           </div>
@@ -149,7 +147,13 @@ export default function Customers() {
             <div className="ml-4">
               <p className="text-sm font-medium text-neutral-500">Avg. Customer Value</p>
               <p className="text-2xl font-bold text-neutral-900">
-                {formatCurrency(250)} {/* This would be calculated from actual order data */}
+                {(() => {
+                  const customers = data?.customers || []
+                  const totalSpent = customers.reduce((sum: number, customer: any) => 
+                    sum + (parseFloat(customer.total_spent || '0')), 0)
+                  const avgValue = customers.length > 0 ? totalSpent / customers.length : 0
+                  return formatCurrency(avgValue)
+                })()}
               </p>
             </div>
           </div>
@@ -252,62 +256,139 @@ function CustomerCard({ customer }: { customer: any }) {
     })
   }
 
+  const formatCurrency = (amount: string | number) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(numAmount || 0)
+  }
+
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName?.charAt(0) || ''}${lastName?.charAt(0) || ''}`.toUpperCase()
   }
 
+  const getTierColor = (tier: string) => {
+    switch(tier?.toLowerCase()) {
+      case 'platinum': return 'bg-purple-100 text-purple-800'
+      case 'gold': return 'bg-yellow-100 text-yellow-800'
+      case 'silver': return 'bg-gray-100 text-gray-800'
+      case 'prospect': return 'bg-blue-100 text-blue-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg border border-neutral-200 p-6 hover:shadow-lg transition-shadow duration-200">
-      <div className="flex items-center space-x-4">
-        <div className="flex-shrink-0">
-          <div className="h-12 w-12 rounded-full bg-neutral-200 flex items-center justify-center">
-            <span className="text-sm font-medium text-neutral-700">
-              {getInitials(customer.first_name, customer.last_name)}
-            </span>
+      {/* Header with avatar and basic info */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center space-x-3">
+          <div className="flex-shrink-0">
+            <div className="h-12 w-12 rounded-full bg-neutral-200 flex items-center justify-center relative">
+              <span className="text-sm font-medium text-neutral-700">
+                {getInitials(customer.first_name, customer.last_name)}
+              </span>
+              {customer.vip_status && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gold-500 rounded-full flex items-center justify-center">
+                  <span className="text-xs text-white">★</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-neutral-900 truncate">
+                {customer.first_name} {customer.last_name}
+              </h3>
+              {customer.vip_status && (
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                  VIP
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-neutral-500 truncate">
+              {customer.email}
+            </p>
           </div>
         </div>
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-neutral-900 truncate">
-            {customer.first_name} {customer.last_name}
-          </h3>
-          <p className="text-sm text-neutral-500 truncate">
-            {customer.email}
+        {customer.customer_tier && (
+          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTierColor(customer.customer_tier)}`}>
+            {customer.customer_tier}
+          </span>
+        )}
+      </div>
+
+      {/* Customer metrics */}
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="text-center">
+          <p className="text-lg font-bold text-neutral-900">
+            {customer.total_orders || 0}
           </p>
+          <p className="text-xs text-neutral-500">Total Orders</p>
+        </div>
+        <div className="text-center">
+          <p className="text-lg font-bold text-green-600">
+            {formatCurrency(customer.total_spent || 0)}
+          </p>
+          <p className="text-xs text-neutral-500">Total Spent</p>
         </div>
       </div>
 
-      <div className="mt-4 space-y-2">
+      {/* Additional details */}
+      <div className="space-y-2 text-xs text-neutral-500">
         {customer.phone && (
-          <div className="flex items-center text-sm text-neutral-500">
-            <Phone className="h-4 w-4 mr-2" />
-            {customer.phone}
+          <div className="flex items-center">
+            <Phone className="h-3 w-3 mr-2" />
+            <span className="truncate">{customer.phone}</span>
           </div>
         )}
-        <div className="flex items-center text-sm text-neutral-500">
-          <Calendar className="h-4 w-4 mr-2" />
-          Joined {formatDate(customer.created_at)}
+        
+        <div className="flex items-center">
+          <Calendar className="h-3 w-3 mr-2" />
+          <span>Joined {formatDate(customer.created_at)}</span>
         </div>
+        
+        {customer.last_purchase_date && (
+          <div className="flex items-center">
+            <ShoppingBag className="h-3 w-3 mr-2" />
+            <span>Last order {formatDate(customer.last_purchase_date)}</span>
+          </div>
+        )}
+
+        {customer.average_order_value && parseFloat(customer.average_order_value) > 0 && (
+          <div className="flex items-center">
+            <DollarSign className="h-3 w-3 mr-2" />
+            <span>Avg: {formatCurrency(customer.average_order_value)}</span>
+          </div>
+        )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <div>
-          <p className="text-xs text-neutral-500">Customer since</p>
-          <p className="text-sm font-medium text-neutral-900">
-            {formatDate(customer.created_at)}
-          </p>
+      {/* Action buttons */}
+      <div className="mt-4 flex items-center justify-between pt-4 border-t border-neutral-100">
+        <div className="flex items-center space-x-1">
+          {customer.repeat_customer && (
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+              Repeat
+            </span>
+          )}
+          {customer.engagement_score && (
+            <span className="text-xs text-neutral-500">
+              Engagement: {customer.engagement_score}%
+            </span>
+          )}
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <Link
             to={`/customers/${customer.id}`}
             className="inline-flex items-center p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50"
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="h-3 w-3" />
           </Link>
           <a
             href={`mailto:${customer.email}`}
             className="inline-flex items-center p-1.5 border border-neutral-300 rounded-md text-neutral-400 hover:text-neutral-500 hover:bg-neutral-50"
           >
-            <Mail className="h-4 w-4" />
+            <Mail className="h-3 w-3" />
           </a>
         </div>
       </div>
