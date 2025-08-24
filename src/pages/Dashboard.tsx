@@ -2,6 +2,7 @@ import React from 'react'
 import { useDashboardStats } from '../hooks/useData'
 import { AdminTestComponent } from '../components/AdminTestComponent'
 import { DebugPanel } from '../components/DebugPanel'
+import { ClientConfigTest } from '../components/ClientConfigTest'
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -90,6 +91,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Client Configuration Test - shows which client is working */}
+      <ClientConfigTest />
+      
       {/* Debug Panel - temporary for debugging */}
       <DebugPanel />
       
