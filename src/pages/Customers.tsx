@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useCustomers } from '../hooks/useData'
 import { Link } from 'react-router-dom'
+import SupabaseTest from '../components/SupabaseTest'
 import { 
   Search, 
   Plus, 
@@ -13,7 +14,8 @@ import {
   User,
   Users,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Star
 } from 'lucide-react'
 
 export default function Customers() {
@@ -77,6 +79,9 @@ export default function Customers() {
 
   return (
     <div className="space-y-6">
+      {/* Debug Component */}
+      <SupabaseTest />
+      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
