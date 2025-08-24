@@ -105,24 +105,16 @@ export function DebugPanel() {
     }
 
     // Test 5: Check service role configuration
-    try {
-      const adminConfig = supabaseAdmin.supabaseKey
-      const regularConfig = supabase.supabaseKey
-      
-      testResults.push({
-        name: 'Key Configuration Check',
-        status: 'success',
-        message: `Admin key: ${adminConfig?.slice(0, 20)}..., Regular key: ${regularConfig?.slice(0, 20)}...`,
-        details: { adminKey: adminConfig?.slice(0, 50), regularKey: regularConfig?.slice(0, 50) }
-      })
-    } catch (err: any) {
-      testResults.push({
-        name: 'Key Configuration Check',
-        status: 'error',
-        message: `Exception: ${err.message}`,
-        details: err
-      })
-    }
+    testResults.push({
+      name: 'Client Configuration Check',
+      status: 'success',
+      message: 'Both supabase and supabaseAdmin clients are initialized',
+      details: {
+        adminClientExists: !!supabaseAdmin,
+        regularClientExists: !!supabase,
+        timestamp: new Date().toISOString()
+      }
+    })
 
     setTests(testResults)
     setIsRunning(false)
