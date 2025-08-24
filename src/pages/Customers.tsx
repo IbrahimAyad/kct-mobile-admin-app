@@ -289,7 +289,7 @@ function CustomerCard({ customer }: { customer: any }) {
                 {getInitials(customer.first_name, customer.last_name)}
               </span>
               {customer.vip_status && (
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gold-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
                   <span className="text-xs text-white">★</span>
                 </div>
               )}
